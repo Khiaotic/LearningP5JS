@@ -6,68 +6,100 @@
 /////////////////////////////////////////////////////CODE BREAK/////////////////////////////////////////////////////////////////////////////////
 
 //---My Configuration----//
-//don't know if this is the amount on the canvas at one time or a different variable...will find out
-// let cellBodyAmount= 90
+const donorCellAmount = 50;
+let donorCellAverageSize = 50;
+const layerAmount = 4;
+//number of layers stacked on top of each other
 
-// //average size of the cell bodies...havent figured out what i want to display in them yet
-// let cellBodyAverageSize = 50
+const mitochondriaMode="name"
+//donors are the powerhouse of the cell
+
+const nameArray =[];
+//donors...1s (name once), 10s (name corresponding)
+
+let donorCellArray =[];
+let layerArray =[];
+
+let cameraOffsetX;
+let cameraOffsetY;
+let cameraV; 
+
+//camera movements/controls
+let controllerX, controllerY;
+
+let inputElement;
+
+let mainHue;
+
+let texture;
+
+let xRayImage=[]
+////might need to make separate pop js for this
 
 
-// /// let "sentimentArry equal and empty object...sentiment meaning my emotions"
-// const sentimentArray = []
+// function preload(){
+//   texture= loadImage('')
+// } load initial xRay here
 
 
+function setup (){
+  if (windowWidth>600 && windowHeight>600){
+    createCanvas(600,600);
+  } else {
+    createCanvas(windowWidth-50, windowHeight-50)
+    donorCellAverageSize = windowWidth/10;
+    //creates 600x600px canvas and resizes it to fit other screens
+  }
 
-function setup() {
-  //canvas is 600 x 600 px 
-  createCanvas(600, 600);
-  noFill();
-  stroke(0);
+  
+  //--Starting Point--//
+  pixelDensity(0.8);
+  //draws things with fewer dots so computer runs faster
+
+  //---centering the camera---//
+  cameraOffsetX= width/2;
+  //start looking through camera from middle (left/right)
+  cameraOffsetY= height/2;
+  //start looking through camera from middle (up.down)
+
+  cameraV= createVector(0,0);
+  //camera has no movement yet
+
+  mainHue=random(360);
+
+
+//---CREATING LAYERS---///
+for (let i=0; i < layerAmount; i++){
+  //for loop repeats 4 times (layer amount) to create new layers
+  const layer =createGraphics(width*2, height*2)
+  //makes the layer twice as big as the screen
+  layerArray.push(layer);
+  //adds layer to stack pile  while leaving previously made layers alone; 
+  // push() draws groups that contains
+  //its own own style and transformations
 }
 
-function draw() {
-  background(255, 245, 215);
-  
-  //adding this to show points/ where my mouse is on my canvas
-  text(`${mouseX}, ${mouseY}`, 20, 20);
-  
-  //starts drawing the shape
-  beginShape();
 
-  //the FIRST point..
-  vertex(300, 200)
-///(curve start left/right, curve start up/down, BEVEL, curve end left/right, curve end up/down END point)
-  bezierVertex(300, 200, 400, 200, 400, 300)
-    //Top Right Curve
-    //starts at 300 because vertex (initial point) starts at and ends at 300
 
-    //up 1....up 2....down 1...up 2...down 1....up 1
-  bezierVertex(400, 400, 300, 400, 300, 400)
-    //Bottom right curve
-
-  //down 2...same...down 1....down 1...down 1...down 1
-  bezierVertex(200, 400, 200, 300, 200, 300)
-  //Bottom left curve
-  
-  //same....up 2...up  1...down 1...up 1...down 1
-  bezierVertex(200, 200, 300, 200, 300, 200)
-  //Top left curve
-
-  endShape();
-};
+//---CREATING DONOR CELLS ON LAYERS----//
+for (i=0, i < donorCellAmount; i++){
+  //make donor cells until specified amount
+  donorCellArray.push( new Donor ({
+    //will make a new donor while leaving the rest
+    p:createVector(random(width*2), random(height*2)),
+    //p = position
+    //createVector() put cells on x and y coordinates
+    //picks random SPOTS for cell to be placed even outside of the canvas(bc *2)
+    r:randomGaussian(donorCellAverageSize,10),
+    //r = radius (cell size)
+    //randomGaussian= picks a size close to the average 
+    //with some variations
+    layer:floor(random(0,layerAmount))
+    //randomly places donor cells on layers in between 1-4
+  }))
+}
+}
 
 
 
 
-//  noFill();
-///---20250707 i want to make the undulating wavy circle shape using the bezier method of the author and understand it--- 
-///---im on variables and change---
-//  //adds first anchor point
-//  vertex (200, 200);
-//  bezierVertex(200, 0, 0, 0, 168, 133);
-
-// ////add bezier curves
-// //// the first four set the curve! 
-// //the LAST anchor sets the END point!! 
-// // (curve, curve, curve, curve, anchor left/right, anchor up/down)///
-// bezierVertex(100, 20, 90, 90, 30, 90);
