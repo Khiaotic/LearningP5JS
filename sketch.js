@@ -14,7 +14,7 @@ const layerAmount = 4;
 const mitochondriaMode="name"
 //donors are the powerhouse of the cell
 
-const nameArray =[];
+const nameArray =["Glory D", "Bunzy", "Taylor R"];
 //donors...,10s (once), 20s (twice)
 
 let donorCellArray =[];
@@ -71,7 +71,7 @@ function setup (){
 //---CREATING LAYERS---///
 for (let i=0; i < layerAmount; i++){
   //for loop repeats 4 times (layer amount) to create new layers
-  const layer =createGraphics(width*2, height*2)
+  const layer = createGraphics(width*2, height*2)
   //makes the layer twice as big as the screen
   layerArray.push(layer);
   //adds layer to stack pile  while leaving previously made layers alone; 
@@ -81,7 +81,7 @@ for (let i=0; i < layerAmount; i++){
 
 
 //---CREATING DONOR CELLS ON LAYERS----//
-for (i=0, i < donorCellAmount; i++){
+for (i=0; i < donorCellAmount; i++){
   //make donor cells until specified amount
   donorCellArray.push( new Donor ({
     // push () is saving these specific settings below
