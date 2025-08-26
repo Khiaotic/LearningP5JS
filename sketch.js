@@ -37,9 +37,10 @@ let xRayImage=[]
 ////might need to make separate pop js for this
 
 
-// function preload(){
-//   texture= loadImage('')
-// } load initial xRay here
+function preload(){
+  texture= loadImage('mask_img_test');
+ } 
+//load initial xRay here
 
 
 function setup (){
