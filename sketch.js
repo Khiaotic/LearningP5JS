@@ -40,7 +40,7 @@ let xRayBG;
 
 
 function preload(){
-  xRayBG= loadImage('mask_img_test.png');
+  xRayBG= loadImage('assets/mask_img_test.png');
  } 
 //load initial xRay here
 
