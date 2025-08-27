@@ -9,7 +9,7 @@ class Donor{
             //// cell size
         this.layer = thanks.layer
             ///cells drawn on certain layers
-        this.wiggleSpeed = random(0.1,1,1)
+        this.wiggleSpeed = random(0.1,1)
             ////how fast the cell wiggles
         this.controlPointAmount = floor(random(10,30))
             ////how many dots make up the cell body
@@ -17,7 +17,7 @@ class Donor{
             ////list of dots that make up the cell body
         this.xRatio = random(0.5,2)
         this.yRatio = random(0.5,2)
-        this.name = random(donorCellArray)
+        this.name = random(nameArray)
         colorMode(HSB)
             //colorMode changes the way color values are interpreted
             //HSB = Hue, Saturation, Brightness
@@ -50,9 +50,9 @@ class Donor{
         }
     }
 update() {
-this.p.x += (noise(frameCount*0.01,500*this.random)-0.05)
+this.p.x += (noise(frameCount*0.01,500*this.random)-0.5)
 //this.p.x / this.p.y is the cell's center point 
-this.p.x += (noise(frameCount*0.01,-200*this.random)-0.05)
+this.p.y += (noise(frameCount*0.01,-200*this.random)-0.5)
 // noise()- returns random numbers that can be tuned to feel organic
 //noise is supplying the gentle wiggles
 for (let [i, dots] of this.coordinates.entries()){
@@ -70,13 +70,17 @@ draw(){
     layer.noStroke()
     layer.fill(this.color)
     layer.translate(this.p.x, this.p.y)
+
     //goes to the cell's position
     bezierCircle(this.coordinates, layer)
     //draws the cell/circle
     if(mitochondriaMode ==='name'){
-        layer.circle(0,0,this.r/5)
+        //drawing the actual cells
+        layer.fill(255)
+        //text color
+        // layer.circle(0,0,this.r/5)
         layer.textAlign(CENTER)
-        layer,textSize(this.r*2)
+        layer.textSize(this.r*.5)
         layer.text(this.name,0,this.r/3)
     }
     layer.pop()

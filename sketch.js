@@ -14,7 +14,7 @@ const layerAmount = 4;
 const mitochondriaMode="name"
 //donors are the powerhouse of the cell
 
-const nameArray =["Glory D", "Bunzy", "Taylor R"];
+const nameArray =["Glory D", "Bunzy", "Taylor R","Ariel M","Da'Nya W", "Jasmine P", "Maral G", "Laura G", "Corinne M", "Cass F","Sonia D","Zach S","Kara","Trinity"];
 //donors...,10s (once), 20s (twice)
 
 let donorCellArray =[];
@@ -33,12 +33,14 @@ let mainHue;
 
 let texture;
 
-let xRayImage=[]
+let xRayImages=[]
 ////might need to make separate pop js for this
+
+let xRayBG;
 
 
 function preload(){
-  texture= loadImage('mask_img_test');
+  xRayBG= loadImage('mask_img_test.png');
  } 
 //load initial xRay here
 
@@ -87,7 +89,7 @@ for (i=0; i < donorCellAmount; i++){
   donorCellArray.push( new Donor ({
     // push () is saving these specific settings below
     //will make a new donor while leaving the rest
-    p:createVector(random(width*2), random(height*2)),
+    p:createVector(random(-width/2, width * 1.5), random(-height/2, height * 1.5)),
     //p = position
     //createVector() put cells on x and y coordinates
     //picks random SPOTS for cell to be placed even outside of the canvas(bc *2)
@@ -99,7 +101,7 @@ for (i=0; i < donorCellAmount; i++){
     //randomly places donor cells on layers in between 1-4
   }))
 }
-inputElement=select("focal-length")
+inputElement=select("#focal-length")
 //referenced in configuration at the top "inputElement" is a VARIABLE not f(x)
 //select() searches for the FIRST element that css selector string ("")
 
@@ -111,11 +113,12 @@ function draw (){
   push()
   ///what i put below this only affects what is below and not the rest of the canvas
 
-  translate(cameraOffsetX, cameraOffsetY)
+  translate(-cameraOffsetX, -cameraOffsetY)
   //translate()- shifts the origin (top left in 2D mode/ center in WebGL mode) to a different position
 
   //need to either do an order function for bg or random
-  //background()
+  image(xRayBG, -cameraOffsetX, -cameraOffsetY, width * 2, height *2);
+  //allows the image to scroll when camera moves
 
   for (let layer of layerArray) {
     layer.clear()
@@ -146,12 +149,12 @@ function draw (){
 
     layer.filter(BLUR, blurRatio)
     push();
-    imageMode(CENTER)
-    //centers the image
-
-    scale(1)
+//     imageMode(CENTER)
+//     //centers the image
+//     // image(texture,0,0,width,height)
+//     scale(1)
     image(layer,0,0)
-// shows the layer on the screen
+// // shows the layer on the screen
 
     pop();
   }
@@ -171,22 +174,22 @@ const angle = atan2((mouseY-controllerY), (mouseX-controllerX))
 //atan2: Calculates the angle formed by a point, the origin, and the positive x-axis
     //(continued) The first parameter is the point's y-coordinate and the second parameter is its x-coordinate
 
-if (d < 40) {
+if (placement < 40) {
   circle (mouseX, mouseY, 20)
 } else {
   circle(controllerX+cos(angle)*40, controllerY+sin(angle)*40,20)
 }
  
 cameraV= createVector(cos(angle), sin(angle))
-cameraV.setMag(map(d < 40?d:40,0,40,0,3))
+cameraV.setMag(map(placement < 40? placement :40,0,40,0,3))
 } else {
   ////if MOUSE IS NOT PRESSED
   cameraV.mult(0.9)
   ////camera movement friction (slow)
   ////this is undefined because it only works on vectors, so only occurs if the mouse is not pressed (else)
 }
-cameraOffsetX += cameraV.x 
-cameraOffsetY =+ cameraV.y 
+cameraOffsetX += cameraV.x * 0.5
+cameraOffsetY += cameraV.y *0.5
 
 /////---KeyPresses Movement----///////
 if(keyIsPressed){
@@ -204,10 +207,10 @@ if(keyIsPressed){
 		}
 	}
   /////stops the camera from going off screen///////
-	if(cameraOffsetX<0)cameraOffsetX=0
-	if(cameraOffsetX>width)cameraOffsetX=width
-	if(cameraOffsetY<0)cameraOffsetY=0
-	if(cameraOffsetY>width)cameraOffsetY=width
+	if(cameraOffsetX<0)cameraOffsetX=0;
+	if(cameraOffsetX>width * 2)cameraOffsetX=width;
+	if(cameraOffsetY<0)cameraOffsetY=0;
+	if(cameraOffsetY>height *2)cameraOffsetY=height;
 }
 
 function mousePressed(){
