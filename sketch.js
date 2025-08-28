@@ -15,7 +15,7 @@ const mitochondriaMode="name"
 //donors are the powerhouse of the cell
 // let uniqueNames = [... new Set(nameArray)]
 //removes duplicates if needed
-const nameArray =["Glory D", "Bunzy", "Taylor R","Ariel M","Da'Nya W", "Jasmine P", "Maral G", "Laura G", "Corinne M", "Cass F","Sonia D","Zach S","Kara","Trinity"];
+const nameArray =["Glory D", "Bunzy", "Taylor R","Ariel M","Da'Nya W", "Jasmine P", "Maral G", "Laura G","Taylor R", "Corinne M", "Cass F","Sonia D","Zach S", "Glory D","Kara","Trinity"];
 //donors...,10s (once), 20s (twice)
 
 let donorCellArray =[];
