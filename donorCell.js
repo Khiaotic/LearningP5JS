@@ -17,7 +17,7 @@ class Donor{
             ////list of dots that make up the cell body
         this.xRatio = random(0.5,2)
         this.yRatio = random(0.5,2)
-        this.name = random(nameArray)
+        this.name = thanks.name || random(nameArray)
         colorMode(HSB)
             //colorMode changes the way color values are interpreted
             //HSB = Hue, Saturation, Brightness

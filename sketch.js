@@ -13,12 +13,14 @@ const layerAmount = 4;
 
 const mitochondriaMode="name"
 //donors are the powerhouse of the cell
-
+// let uniqueNames = [... new Set(nameArray)]
+//removes duplicates if needed
 const nameArray =["Glory D", "Bunzy", "Taylor R","Ariel M","Da'Nya W", "Jasmine P", "Maral G", "Laura G", "Corinne M", "Cass F","Sonia D","Zach S","Kara","Trinity"];
 //donors...,10s (once), 20s (twice)
 
 let donorCellArray =[];
 let layerArray =[];
+let populationValue = Math.min(nameArray.length, donorCellAmount);
 
 let cameraOffsetX;
 let cameraOffsetY;
@@ -60,9 +62,11 @@ function setup (){
   //draws things with fewer dots so computer runs faster
 
   //---centering the camera---//
-  cameraOffsetX= width/2;
+  //-i changed these to move the camera at the start of the app to a different position
+  //my BG and canvas extends past the view point...just saying
+  cameraOffsetX= width/3;
   //start looking through camera from middle (left/right)
-  cameraOffsetY= height/2;
+  cameraOffsetY= height/3;
   //start looking through camera from middle (up.down)
 
   cameraV= createVector(0,0);
@@ -81,15 +85,17 @@ for (let i=0; i < layerAmount; i++){
   // push() draws groups that contains its own own style and transformations
 }
 
-
+let uniqueNames = [... new Set(nameArray)]
+shuffle(uniqueNames, true)
+let populationValue = Math.min(uniqueNames.length,donorCellAmount)
 
 //---CREATING DONOR CELLS ON LAYERS----//
-for (i=0; i < donorCellAmount; i++){
+for (i=0; i < populationValue; i++){
   //make donor cells until specified amount
   donorCellArray.push( new Donor ({
     // push () is saving these specific settings below
     //will make a new donor while leaving the rest
-    p:createVector(random(-width/2, width * 1.5), random(-height/2, height * 1.5)),
+    p:createVector(random(-width/2, width *1.5 ), random(-height/2, height *1.5 )),
     //p = position
     //createVector() put cells on x and y coordinates
     //picks random SPOTS for cell to be placed even outside of the canvas(bc *2)
@@ -97,8 +103,10 @@ for (i=0; i < donorCellAmount; i++){
     //r = radius (cell size)
     //randomGaussian= picks a size close to the average 
     //with some variations
-    layer:floor(random(0,layerAmount))
+    layer:floor(random(0,layerAmount)),
     //randomly places donor cells on layers in between 1-4
+    name:uniqueNames[i]
+    //passes names directly
   }))
 }
 inputElement=select("#focal-length")
@@ -208,15 +216,61 @@ if(keyIsPressed){
 	}
   /////stops the camera from going off screen///////
 	if(cameraOffsetX<0)cameraOffsetX=0;
-	if(cameraOffsetX>width * 2)cameraOffsetX=width;
+	if(cameraOffsetX>width*2)cameraOffsetX=width;
 	if(cameraOffsetY<0)cameraOffsetY=0;
-	if(cameraOffsetY>height *2)cameraOffsetY=height;
+	if(cameraOffsetY>height*2)cameraOffsetY=height;
+
+
+  // const worldMinX = -width/2;
+  // const worldMaxX = width *1.5;
+  // const worldMinY = -height/2;
+  // const worldMaxY = height * 1.5;
+  
+  
+  // const minCameraOffsetX = worldMinX + width /2
+  // const maxCameraOffsetX = worldMinX - width /2
+  // const minCameraOffsetY = worldMinY+ height /2
+  // const maxCameraOffsetY = worldMinY - height /2
+  
+  // cameraOffsetX=constrain(cameraOffsetX, minCameraOffsetX, maxCameraOffsetX)
+  // cameraOffsetY=constrain(cameraOffsetY, minCameraOffsetY, maxCameraOffsetY)
+  
+//   function mousePressed(){
+  // }
 }
 
-function mousePressed(){
-	controllerX = mouseX
-	controllerY = mouseY
-  ////sets controller based on where the cursor/mouse is clicked
+
+
+function mousePressed (){
+  let worldMouseX = mouseX + cameraOffsetX;
+  let worldMouseY = mouseY + cameraOffsetY;
+  
+  const focalLength= map(inputElement.value(),0, 10, -1, layerAmount)
+  const targetLayer = floor(focalLength);
+  //choose layer you want to target
+  
+  for(let i = donorCellArray.length -1; i >= 0; i--){
+    let donor = donorCellArray[i];
+    if (donor.layer === targetLayer){
+      let d = dist(worldMouseX, worldMouseY, donor.p.x, donor.p.y);
+      if(d < donor.r){
+        donorCellArray.splice(i,1); //POP!
+        donorCellArray.push(new Donor({
+          p: createVector(
+            random(-width / 2, width *1.5),
+            random(-height / 2, height *1.5),
+          ),
+          r: randomGaussian(donorCellAverageSize, 10),
+          layer: floor(random(0,layerAmount))
+        }))
+        break;
+      }
+    }
+  }
+    controllerX = mouseX
+    controllerY = mouseY
 }
+  ////sets controller based on where the cursor/mouse is clicked
+
 
 
