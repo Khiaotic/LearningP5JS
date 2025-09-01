@@ -21,7 +21,7 @@ const nameArray =["Glory D", "Bunzy", "Taylor R","Ariel M","Da'Nya W", "Jasmine 
 let donorCellArray =[];
 let layerArray =[];
 let populationValue = Math.min(nameArray.length, donorCellAmount);
-
+let popCount= 0;
 let cameraOffsetX;
 let cameraOffsetY;
 let cameraV; 
@@ -43,9 +43,17 @@ let xRayBG;
 
 function preload(){
   xRayBG= loadImage('assets/mask_img_test.png');
- } 
-//load initial xRay here
+  //load initial xRay here
+ for (let i =1;  i < 12; i++){
+  // const i = 1;
+  const padded = String(i).padStart(3,'0');
+  //padStart()- pads the beginning of a string with a specified character or string
+  let img =loadImage(`assets/xray-${padded}.png`)
+  xRayImages.push(img)
+ }
+} 
 
+let currentBGIndex= -1
 
 function setup (){
   if (windowWidth>600 && windowHeight>600){
@@ -255,6 +263,20 @@ function mousePressed (){
       let d = dist(worldMouseX, worldMouseY, donor.p.x, donor.p.y);
       if(d < donor.r){
         donorCellArray.splice(i,1); //POP!
+        popCount++;
+        if (popCount % 5 === 0 && xRayImages.length > 0) {
+          console.log("WHAT THE F*** CHNAGE THE BG");
+          let randomIndex;
+          do {
+            randomIndex = floor(random(xRayImages.length));
+          } while (randomIndex === currentBGIndex && xRayImages.length > 1)
+         xRayBG = xRayImages[randomIndex];
+         currentBGIndex = randomIndex;
+        }
+        // if (popCount % 5 === 0 && xRayImages.length > 0){
+        //   let randomIndex = floor(random(xRayImages.length));
+        //   xRayBG= xRayImages[randomIndex]
+        // }
         donorCellArray.push(new Donor({
           p: createVector(
             random(-width / 2, width *1.5),
