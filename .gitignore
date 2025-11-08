@@ -23,7 +23,7 @@ node_modules/
 vendor/
 build/
 dist/
-assets/
+
 
 # Logs and temporary files
 *.log
